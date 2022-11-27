@@ -1,0 +1,11 @@
+{
+  "name": "service-times",
+  "version": "1.0.0",
+  "description": "Look up the Tenrikyo Church Headquarters service times.",
+  "scripts": {
+    "preinstall": "npm i serve concurrently opener -g",
+    "start": "concurrently \"serve src -p 3036\" \"opener http://localhost:3036\""
+  },
+  "author": "Lewis Nakao <lewdev@gmail.com>",
+  "license": "UNLICENSED"
+}

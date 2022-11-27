@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="html-css-js-template " default="build" basedir=".">
+<project name="service-times" default="build" basedir=".">
   <property environment="env" />
 
   <target name="build" depends="compile, copy-to-public" description="Build"/>
@@ -17,8 +17,8 @@
   </target>
 
   <target name="copy-to-public">
-    <copy todir="./public"> <!-- overwrite="true" -->
-      <fileset dir="./src" excludes="**/*.html,**/style.css,**/*.js"/>
+    <copy todir="./public" includeEmptyDirs="false">
+      <fileset dir="./src" excludes="**/*.html,**/*.css,**/script.js,**/emojis.js"/>
     </copy>
   </target>
 
@@ -33,23 +33,27 @@
   <target name="compile-index">
     <exec dir="." executable="cmd" >
       <arg line="/c html-minifier"/>
-      <arg line="--collapse-whitespace --remove-comments --remove-tag-whitespace --use-short-doctype"/>
+      <arg line="--remove-comments --collapse-inline-tag-whitespace --remove-tag-whitespace --remove-script-type-attributes "/>
+      <arg line="--use-short-doctype --conservative-collapse --collapse-whitespace --remove-tag-whitespace --decode-entities  --minify-css "/>
       <arg line="-o ./public/index.html"/>
       <arg line="./src/index.html"/>
     </exec>
-    <exec dir="." executable="cmd" >
-      <arg line="/c cleancss -o ./public/style.css ./src/style.css ."/>
-    </exec>
-    <exec dir="." executable="cmd" >
-      <arg line="/c npx google-closure-compiler"/>
-      <arg line="--compilation_level ADVANCED_OPTIMIZATIONS"/>
-      <arg line="--js ./src/script.js"/>
-      <arg line="--js_output_file ./public/script.js"/>
-    </exec>
   </target>
 
-  <target name="phonegap" depends="build-clean">
-    <copy todir="./www"> <!-- overwrite="true" -->
+  <!-- copy over not-compiled "src" to github -->
+  <target name="github-src">
+    <delete dir="../lewdev.github.io/apps/${ant.project.name}"/>
+    <mkdir dir="../lewdev.github.io/apps/${ant.project.name}" />
+    <copy todir="../lewdev.github.io/apps/${ant.project.name}">
+      <fileset dir="./src"/>
+    </copy>
+  </target>
+
+  <!-- copy over compiled "public" to github -->
+  <target name="github" depends="build-clean">
+    <delete dir="../lewdev.github.io/apps/${ant.project.name}"/>
+    <mkdir dir="../lewdev.github.io/apps/${ant.project.name}" />
+    <copy todir="../lewdev.github.io/apps/${ant.project.name}">
       <fileset dir="./public"/>
     </copy>
   </target>
@@ -60,7 +64,7 @@
     </zip>
   </target>
 
-  <target name="cordova" />
+  <target name="i" depends="install-compilers" />
 
   <target name="install-compilers">
     <exec dir="." executable="cmd" >
