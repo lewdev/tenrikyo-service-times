@@ -20,7 +20,7 @@ const langMap = {
 const { languages, language } = navigator;
 let lang = ((languages && languages[0]) || language).split("-")[0];
 
-const trans = (s, num) => ((transIndex[lang] && transIndex[lang][s]) || s) + (lang !== "ja" ? num && num !== 1 ? "s" : "" : "");
+const trans = (s, num) => ((transIndex[lang] && transIndex[lang][s]) || s) + (lang !== "ja" ? typeof num === 'number' && num !== 1 ? "s" : "" : "");
 
 const getDaysUntil = date => {
   const diffMs = date - d;
@@ -34,8 +34,8 @@ const initEvents = () => {
     );
   }
   annualEvents = annualEvents.map(event => {
-    const { date, time } = event;
-    let dateObj = new Date(`${date}/${year} ${time}`);
+    const { date } = event;
+    let dateObj = new Date(`${date}/${year} 23:59:999`);
     if (dateObj < new Date()) {
       dateObj = new Date(`${date}/${year + 1}`);
     }
@@ -43,7 +43,6 @@ const initEvents = () => {
   });
   annualEvents.sort((a, b) => a.dateObj - b.dateObj);
 };
-
 
 const formatTime = time => new Date(`1/1/${year} ${time}`).toLocaleTimeString([lang], {timeStyle: "short"});
 
@@ -66,25 +65,32 @@ const renderEventsTable = () => {
   renderEventsTableSide();
 };
 
-const days = days => `${days} ${trans("day", days)}`
+const inDays = days => days ? `in ${days} ${trans("day", days)}` : `<span class="text-info d-inline">${trans("(Today)")}</span>`;
 
 const renderEventsTableSide = isLeft => {
   const className = isLeft ? "left" : "right";
   const parentDiv = document.getElementById("events");
   const div = parentDiv.getElementsByClassName(className)[0];
-  div.innerHTML = `<table class="table"><thead>
-    <tr>${["Date", "Time", "Event", "Until"].map(s =>`<th class="text-center">${trans(s)}</th>`).join("")}</tr>
-  </thead>
-  <tbody></tbody></table>`;
+  div.innerHTML = (
+    `<table class="table mx-auto"><thead>
+      <tr>${["Date", "Time", "Event", "Until"].map(s =>`<th class="text-center">${trans(s)}</th>`).join("")}</tr>
+    </thead>
+    <tbody></tbody></table>`
+  );
   const tbody = div.getElementsByTagName("tbody")[0];
   const half = Math.ceil(annualEvents.length / 2) - 1
   tbody.innerHTML = annualEvents.map((event, i) => (
-    ((isLeft && i <= half) || (!isLeft && i > half)) ? `<tr>
-    <td class="border text-center align-middle text-nowrap">${formatDate(event.date)}</td>
-    <td class="border text-center align-middle text-nowrap">${formatTime(event.time)}</td>
-    <td class="border align-middle text-nowrap">${trans(event.event)}</td>
-    <td class="border align-middle text-nowrap">${days(event.daysUntil)}</td>
-    </tr>` : "")).join("");
+    ((isLeft && i <= half) || (!isLeft && i > half)) ? (
+      `<tr>
+        <td class="border text-center align-middle text-nowrap">${formatDate(event.date)}</td>
+        <td class="border text-center align-middle text-nowrap">${formatTime(event.time)}</td>
+        <td class="border align-middle text-nowrap">${trans(event.event)}</td>
+        <td class="border align-middle text-nowrap">
+          ${inDays(event.daysUntil)}
+        </td>
+      </tr>`
+    ) : ""
+  )).join("");
 };
 
 const renderTimeTable = () => {
@@ -96,7 +102,7 @@ const renderTimeTableSide = isLeft => {
   const className = isLeft ? "left" : "right";
   const parentDiv = document.getElementById("serviceTimes");
   const div = parentDiv.getElementsByClassName(className)[0];
-  div.innerHTML = `<table class="table"><thead>
+  div.innerHTML = `<table class="table mx-auto"><thead>
     <tr>
       ${["Month", "Morning", "Evening"].map(s =>(
         `<th class="text-center">${trans(s)}</th>`
@@ -138,10 +144,11 @@ const getLastDayOfMonth = displayMonth => {
 };
 
 const renderTimes = (label, time, half) => {
-  const displayMonth = month + (label === "Next" && half === 1 ? 2 : 1);
+  const displayMonth = ((month + (label === "Next" && half === 1 ? 1 : 0)) % 12) + 1;
   const lastDayOfMonth = getLastDayOfMonth(displayMonth);
-  return (
-  `<div class="col" style="width: 300px">
+  console.log(displayMonth);
+  return time && (
+  `<div class="col my-1">
     <strong class="text-primary">${trans(label)} </strong>
     (${formatDate(`${displayMonth}/${half === 1 ? 1 : 16}`)} - 
     ${formatDate(`${displayMonth}/${half === 1 ? 15 : lastDayOfMonth}`)})
@@ -153,9 +160,8 @@ const renderTimes = (label, time, half) => {
 const renderServiceTimes = () => currentTime.innerHTML = (
   `<div class="row">
     ${renderTimes("Current", time, half)}
-    ${renderTimes("Next", half === 2 ? serviceTimes[month + 1 % 12] : time, half === 2 ? 1 : 2)}
-  </div>
-  <div><strong>${trans("Japan Time")}:</strong> <span id="japanClock"></span></div>`
+    ${renderTimes("Next", half === 2 ? serviceTimes[(month + 1) % 12] : time, half === 2 ? 1 : 2)}
+  </div>`
 );
 
 setInterval(() => {
@@ -168,7 +174,10 @@ const renderUpcomingEvent = () => {
   const nextEvent = annualEvents[0];
   const { event, date, time, daysUntil } = nextEvent || {};
   upcomingEvent.innerHTML = (
-    `<b class="d-block">${trans("Next")} ${trans("Event")}:</b> ${trans(event)}<br/>${formatDate(date)} ${formatTime(time)} in ${daysUntil} days`
+    `<div>
+      <b>${trans("Next")} ${trans("Event")}:</b>
+      ${trans(event)}<br/>${formatDate(date)} ${formatTime(time)} ${inDays(daysUntil)}
+    </div>`
   );
 };
 

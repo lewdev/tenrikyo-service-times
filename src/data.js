@@ -16,6 +16,7 @@ const serviceTimes = [
 const transIndex = {
   "ja": {
     "Tenrikyo Service Times": "天理教本部のおつとめ時刻表",
+    "(Today)": "日",
     "Date": "日",
     "day": "日",
     "Event": "祭典",
@@ -44,6 +45,7 @@ const transIndex = {
 
 //Every 26th is Monthly Service from 9am
 let annualEvents = [
+  {"date":"12/1","event":"Test","time":"10:00"},
   {"date":"1/1","event":"New Year's Service","time":"5:00"},
   {"date":"1/26","event":"Spring Grand Service","time":"11:30"},
   {"date":"3/27","event":"Spring Memorial Service","time":"9:00"},//

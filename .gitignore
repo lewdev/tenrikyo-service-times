@@ -3,3 +3,4 @@ www/*
 builds/*
 *.apk
 *.zip
+settings.json

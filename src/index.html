@@ -33,18 +33,22 @@
   .my-table-row > div > table { width: 300px !important; }
   </style>
 </head>
-<body>
+<body class="bg-light mb-5">
   <div class="container mt-3">
     <div class="justify-content-between d-flex">
       <h1 id="title">⏲ Tenrikyo Service Times</h1>
       <div id="langSelect" class="btn-group"></div>
     </div>
 
+    <div class="card card-body p-3 my-1 text-center bg-info-500">
+      <strong class="trans" title="Japan Time"></strong> <h3 id="japanClock"></span>
+    </div>
+
     <div class="card card-body p-3 my-1" id="currentTime"></div>
   
     <div class="card card-body p-3 my-1" id="upcomingEvent"></div>
 
-    <details>
+    <details class="card card-body p-3 my-1">
       <summary class="trans" title="Service Times Chart">Service Times Chart</summary>
       <div id="serviceTimes" class="row my-table-row">
         <div class="left col"></div>
@@ -52,7 +56,7 @@
       </div>
     </details>
 
-    <details>
+    <details class="card card-body p-3 my-1">
       <summary class="trans" title="Events Chart"></summary>
       <div id="events" class="row my-table-row">
         <div class="left col"></div>
@@ -67,4 +71,6 @@
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 ga('create', 'UA-2833478-13', 'auto');ga('send', 'pageview');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNP8ER8985"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GNP8ER8985');</script>
 </body></html>
