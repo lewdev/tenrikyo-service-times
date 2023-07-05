@@ -65,7 +65,7 @@ const renderEventsTable = () => {
   renderEventsTableSide();
 };
 
-const inDays = days => days ? `in ${days} ${trans("day", days)}` : `<span class="text-info d-inline">${trans("(Today)")}</span>`;
+const inDays = days => days ? `${trans("in")} ${days} ${trans("day", days)}` : `<span class="text-info d-inline">${trans("(Today)")}</span>`;
 
 const renderEventsTableSide = isLeft => {
   const className = isLeft ? "left" : "right";
@@ -146,7 +146,6 @@ const getLastDayOfMonth = displayMonth => {
 const renderTimes = (label, time, half) => {
   const displayMonth = ((month + (label === "Next" && half === 1 ? 1 : 0)) % 12) + 1;
   const lastDayOfMonth = getLastDayOfMonth(displayMonth);
-  console.log(displayMonth);
   return time && (
   `<div class="col my-1">
     <strong class="text-primary">${trans(label)} </strong>

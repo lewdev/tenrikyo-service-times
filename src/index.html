@@ -31,6 +31,13 @@
   <style>
   .highlight { background-color: #ffe69c !important; }
   .my-table-row > div > table { width: 300px !important; }
+
+  #serviceTimes > .right > table > thead { display: none; }
+  #serviceTimes table > tbody > tr > td:first-child { width: 80px; }
+  #serviceTimes table { margin-bottom: 0 }
+  @media (min-width: 768px)  {
+    #serviceTimes > .right > table > thead { display: contents; }
+  }
   </style>
 </head>
 <body class="bg-light mb-5">
