@@ -1,5 +1,6 @@
+const app = (date => {
 const getDateInOffset = offset => {
-  const d = new Date();
+  const d = date || new Date();
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
   return new Date(utc + (3600000 * offset));
 };
@@ -126,8 +127,8 @@ const getHalfYear = showFirstHalf => serviceTimes.map((time, i) => {
   return (`
     <tr>
       <td rowspan="${bothIsSame ? 1 : 2}" ${cellClass(isMonth)}>${i + 1}</td>
-      <td rowspan="${!bothIsSame && asaIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(asa1)}</td>
-      <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(yuz1)}</td>
+      <td rowspan="${!bothIsSame && asaIsSame ? 2 : 1}" ${cellClass(isFirstHalf || (asaIsSame && isMonth))}>${formatTime(asa1)}</td>
+      <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isFirstHalf || (yuzIsSame && isMonth))}>${formatTime(yuz1)}</td>
     </tr>
     ${bothIsSame ? '' : `<tr>
       ${asaIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(asa2)}</td>`}
@@ -205,3 +206,8 @@ const render = () => {
 };
 initEvents();
 render();
+});
+app();
+//app(new Date("8/29/2023"));
+
+//let day = 0;setInterval(() => {d = new Date("8/28/2023"); d.setDate(d.getDate() + day++); app(d); }, 30);
