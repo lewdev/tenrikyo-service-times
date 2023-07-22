@@ -4,3 +4,4 @@ builds/*
 *.apk
 *.zip
 settings.json
+.vscode

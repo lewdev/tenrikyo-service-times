@@ -30,12 +30,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css" integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
   .highlight { background-color: #ffe69c !important; }
-  .my-table-row > div > table { width: 300px !important; }
+  .my-table-row > div > table { width: 20rem !important; }
 
   #serviceTimes > .right > table > thead { display: none; }
   #serviceTimes table > tbody > tr > td:first-child { width: 80px; }
   #serviceTimes table { margin-bottom: 0 }
-  @media (min-width: 768px)  {
+  th { white-space: nowrap;}
+  @media (min-width: 62rem)  {
     #serviceTimes > .right > table > thead { display: contents; }
   }
   </style>
@@ -48,7 +49,7 @@
     </div>
 
     <div class="card card-body p-3 my-1 text-center bg-info-500">
-      <strong class="trans" title="Japan Time"></strong> <h3 id="japanClock"></span>
+      <strong class="trans" title="🕑 Japan Time"></strong> <h3 id="japanClock"></span>
     </div>
 
     <div class="card card-body p-3 my-1" id="currentTime"></div>
@@ -56,7 +57,7 @@
     <div class="card card-body p-3 my-1" id="upcomingEvent"></div>
 
     <details class="card card-body p-3 my-1">
-      <summary class="trans" title="Service Times Chart">Service Times Chart</summary>
+      <summary class="trans fw-bold" title="⏲️ Service Times Chart">Service Times Chart</summary>
       <div id="serviceTimes" class="row my-table-row">
         <div class="left col"></div>
         <div class="right col"></div>
@@ -64,7 +65,7 @@
     </details>
 
     <details class="card card-body p-3 my-1">
-      <summary class="trans" title="Events Chart"></summary>
+      <summary class="trans fw-bold" title="🗓️ Events Chart"></summary>
       <div id="events" class="row my-table-row">
         <div class="left col"></div>
         <div class="right col"></div>

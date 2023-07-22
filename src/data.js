@@ -1,3 +1,5 @@
+const DAY_MS = 60000 * 60 * 24;
+
 const serviceTimes = [
   {"asa1":"7:00","yuz1":"17:00","asa2":"7:00","yuz2":"17:15"},
   {"asa1":"7:00","yuz1":"17:30","asa2":"6:45","yuz2":"17:45"},
@@ -27,10 +29,11 @@ const transIndex = {
     "Time": "時間",
     "Current": "現在",
     "Next": "次",
-    "Service Times Chart": "おつとめ時刻表",
-    "Events Chart": "イベント",
-    "Japan Time": "日本の時間",
+    "⏲️ Service Times Chart": "⏲️ おつとめ時刻表",
+    "🗓️ Events Chart": "🗓️ イベント",
+    "🕑 Japan Time": "🕑 日本の時間",
     "in": "あと",
+    "Until": "あと",
     //events
     "New Year's Service":"元旦祭",
     "Spring Grand Service":"春季大祭",
@@ -54,3 +57,25 @@ let annualEvents = [
   {"date":"9/27","event":"Autumn Memorial Service","time":"9:00"},
   {"date":"10/26","event":"Autumn Grand Service","time":"8:00"},
 ];
+
+const getDaysUntil = (date, d = new Date().getTime()) => {
+  const diffMs = date - d;
+  return ~~(diffMs / DAY_MS);
+};
+
+const now = new Date();
+const year = now.getFullYear();
+for (let i = 2; i <= 12; i++) {
+  if (i !== 10) annualEvents.push(
+    { date: i + "/26", event: "Monthly Service", time: "9:00"}
+  );
+}
+annualEvents = annualEvents.map(event => {
+  const { date } = event;
+  let dateObj = new Date(`${date}/${year} 23:59:999`);
+  if (dateObj < now) {
+    dateObj = new Date(`${date}/${year + 1}`);
+  }
+  return {...event, dateObj, daysUntil: getDaysUntil(dateObj, now) };
+});
+annualEvents.sort((a, b) => a.dateObj - b.dateObj);
